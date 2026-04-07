@@ -12,7 +12,12 @@
 import AppKit
 import ApplicationServices
 
-let targetTitles = ["Expand tabs", "Collapse tabs"]
+let targetTitles: Set<String> = ["expand tabs", "collapse tabs"]
+
+func normalizedString(_ value: CFTypeRef?) -> String {
+    let stringValue = value as? String ?? ""
+    return stringValue.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+}
 
 guard let chromeApp = NSRunningApplication.runningApplications(
     withBundleIdentifier: "com.google.Chrome"
@@ -48,8 +53,8 @@ func findButton(element: AXUIElement, depth: Int = 0) -> AXUIElement? {
     AXUIElementCopyAttributeValue(element, kAXDescriptionAttribute as CFString, &desc)
 
     let roleStr = role as? String ?? ""
-    let titleStr = title as? String ?? ""
-    let descStr = desc as? String ?? ""
+    let titleStr = normalizedString(title)
+    let descStr = normalizedString(desc)
 
     if roleStr == (kAXButtonRole as String)
         && (targetTitles.contains(titleStr) || targetTitles.contains(descStr))

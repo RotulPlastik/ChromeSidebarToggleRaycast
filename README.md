@@ -4,7 +4,7 @@ https://github.com/user-attachments/assets/7e155801-40e3-4101-a532-8856a9ad3aa0
 
 A [Raycast](https://www.raycast.com/) script command that toggles Chrome's tab sidebar with a single keystroke.
 
-Chrome's "Expand tabs" / "Collapse tabs" button has no keyboard shortcut. This script uses the macOS Accessibility API to find and press it programmatically — no coordinate hacking, works on any screen or resolution.
+Chrome's tab sidebar button has no keyboard shortcut. This script uses the macOS Accessibility API to find and press it programmatically — no coordinate hacking, works on any screen or resolution.
 
 ## Requirements
 
@@ -43,7 +43,7 @@ Open Raycast and search for **"Toggle Chrome Sidebar"**, or assign it a hotkey i
 ## How it works
 
 1. Finds Chrome via its bundle identifier (`com.google.Chrome`)
-2. Walks Chrome's Accessibility tree (`AXUIElement`) looking for a button titled "Expand tabs" or "Collapse tabs"
+2. Walks Chrome's Accessibility tree (`AXUIElement`) looking for the tab sidebar toggle button by its accessibility title or description
 3. Presses the button via `AXUIElementPerformAction`
 
 The script is pre-compiled to a native binary for near-instant execution (~10ms vs ~1.5s for interpreted Swift).
