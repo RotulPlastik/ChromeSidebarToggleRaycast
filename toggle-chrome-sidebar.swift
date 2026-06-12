@@ -23,14 +23,28 @@ guard let chromeApp = NSRunningApplication.runningApplications(
 
 let appElement = AXUIElementCreateApplication(chromeApp.processIdentifier)
 
-var windowsValue: CFTypeRef?
-guard AXUIElementCopyAttributeValue(
+// Prefer the focused window so the toggle hits the window the user is
+// actually on when multiple Chrome windows are open
+var focusedValue: CFTypeRef?
+var window: AXUIElement?
+if AXUIElementCopyAttributeValue(
     appElement,
-    kAXWindowsAttribute as CFString,
-    &windowsValue
-) == .success,
-let windows = windowsValue as? [AXUIElement],
-let window = windows.first else {
+    kAXFocusedWindowAttribute as CFString,
+    &focusedValue
+) == .success, let focused = focusedValue {
+    window = (focused as! AXUIElement)
+} else {
+    var windowsValue: CFTypeRef?
+    if AXUIElementCopyAttributeValue(
+        appElement,
+        kAXWindowsAttribute as CFString,
+        &windowsValue
+    ) == .success, let windows = windowsValue as? [AXUIElement] {
+        window = windows.first
+    }
+}
+
+guard let window else {
     print("No Chrome windows found")
     exit(1)
 }
