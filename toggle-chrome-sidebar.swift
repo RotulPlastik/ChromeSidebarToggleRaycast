@@ -12,7 +12,7 @@
 import AppKit
 import ApplicationServices
 
-let targetTitles = ["Expand tabs", "Collapse tabs"]
+let targetTitles = ["expand tabs", "collapse tabs"]
 
 guard let chromeApp = NSRunningApplication.runningApplications(
     withBundleIdentifier: "com.google.Chrome"
@@ -52,7 +52,7 @@ func findButton(element: AXUIElement, depth: Int = 0) -> AXUIElement? {
     let descStr = desc as? String ?? ""
 
     if roleStr == (kAXButtonRole as String)
-        && (targetTitles.contains(titleStr) || targetTitles.contains(descStr))
+        && (targetTitles.contains(titleStr.lowercased()) || targetTitles.contains(descStr.lowercased()))
     {
         return element
     }
